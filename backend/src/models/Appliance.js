@@ -1,0 +1,41 @@
+import mongoose from "mongoose";
+
+const applianceSchema = new mongoose.Schema(
+    {
+        userId:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        applianceName:{
+            type: String,
+            required:true,
+            trim: true,
+        },
+        room:{
+            type:String,
+            required:true,
+            trim:true
+        },
+        powerRating:{
+            type:Number,
+            required:true,
+            min:1
+        },
+        priority:{
+            type:String,
+            enum:["high","medium","low"],
+            default:"medium"
+        },
+        status:{
+            type:Boolean,
+            default:false
+        },
+    },
+    {
+        timestamps:true
+    },
+);
+
+const Appliance = mongoose.model("Appliance",applianceSchema);
+export default Appliance;

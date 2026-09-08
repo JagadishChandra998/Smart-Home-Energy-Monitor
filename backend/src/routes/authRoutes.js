@@ -1,7 +1,7 @@
-import exxpress from "express";
+import express from "express";
 import { register, login } from "../controllers/authController.js";
 
-const routes = exxpress.Router();
+const routes = express.Router();
 
 routes.post("/register",register);
 routes.post("/login",login);

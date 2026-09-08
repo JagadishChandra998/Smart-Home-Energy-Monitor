@@ -1,0 +1,278 @@
+
+/* ================================
+   AUTH PAGE
+================================ */
+
+.header {
+    width: 100%;
+    max-width: 440px;
+    margin: 60px auto;
+    padding: 38px 40px;
+
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 20px;
+
+    box-shadow:
+        0 20px 50px rgba(15, 23, 42, 0.12),
+        0 5px 15px rgba(15, 23, 42, 0.05);
+
+    box-sizing: border-box;
+}
+
+
+/* ================================
+   HEADER TEXT
+================================ */
+
+.resister {
+    margin: 0 0 8px;
+    color: #4f46e5;
+
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.resister-title {
+    margin: 0;
+
+    color: #0f172a;
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.resister-description {
+    margin: 12px 0 28px;
+
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+
+/* ================================
+   FORM
+================================ */
+
+.user-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+/* ================================
+   INPUTS
+================================ */
+
+.user-input {
+    width: 100%;
+    height: 50px;
+
+    padding: 0 16px;
+
+    box-sizing: border-box;
+
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+
+    background: #f8fafc;
+
+    color: #0f172a;
+    font-size: 15px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.user-input::placeholder {
+    color: #94a3b8;
+}
+
+.user-input:hover {
+    border-color: #cbd5e1;
+    background: #ffffff;
+}
+
+.user-input:focus {
+    border-color: #4f46e5;
+    background: #ffffff;
+
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.10);
+}
+
+
+/* ================================
+   LOGIN BUTTON
+================================ */
+
+.login-button {
+    width: 100%;
+    height: 52px;
+
+    margin-top: 4px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #6366f1
+    );
+
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 12px 25px rgba(79, 70, 229, 0.30);
+}
+
+.login-button:active {
+    transform: translateY(0);
+}
+
+.login-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* ================================
+   LOGIN / REGISTER TOGGLE
+================================ */
+
+.login-toggle {
+    margin: 4px 0 0;
+
+    text-align: center;
+
+    color: #64748b;
+    font-size: 14px;
+}
+
+.login-toggle-button {
+    padding: 0;
+
+    border: none;
+    background: transparent;
+
+    color: #4f46e5;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.login-toggle-button:hover {
+    color: #3730a3;
+    text-decoration: underline;
+}
+
+
+/* ================================
+   ERROR MESSAGE
+================================ */
+
+.login-error {
+    margin: 0;
+    padding: 12px 14px;
+
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+
+    background: #fef2f2;
+
+    color: #dc2626;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* ================================
+   PAGE BACKGROUND
+================================ */
+
+body {
+    margin: 0;
+
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(99, 102, 241, 0.12),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            rgba(79, 70, 229, 0.10),
+            transparent 35%
+        ),
+        #f8fafc;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 500px) {
+
+    .header {
+        width: calc(100% - 30px);
+
+        margin: 30px auto;
+        padding: 30px 24px;
+
+        border-radius: 16px;
+    }
+
+    .resister-title {
+        font-size: 28px;
+    }
+
+    .resister-description {
+        font-size: 14px;
+    }
+
+    .user-input {
+        height: 48px;
+    }
+
+    .login-button {
+        height: 50px;
+    }
+}
