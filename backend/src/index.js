@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import applianceRoutes from "./routes/applianceRoutes.js"
+import ScheduleRoutes from "./routes/scheduleRoutes.js";
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use (express.json());
 
 app.use("/api/auth",authRoutes);
 app.use("/api/appliances",applianceRoutes);
+app.use("/api/schedules",ScheduleRoutes);
 
 
 app.get ("/", (req, res) =>{
