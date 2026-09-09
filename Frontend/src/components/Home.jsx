@@ -103,13 +103,13 @@ function Home() {
 
 
     const currentLoad =
-        liveLoad?.currentLoadKW || 0;
+        liveLoad?.currentLoadPerKW || 0;
 
     const maximumLoad =
-        liveLoad?.maximumLoadKW || 5;
+        liveLoad?.maximumLoad / 1000 || 5;
 
     const remainingLoad =
-        liveLoad?.remainingLoadKW ||
+        liveLoad?.remainingLoad ||
         Math.max(maximumLoad - currentLoad, 0);
 
     const usagePercentage =
@@ -274,7 +274,11 @@ function Home() {
                         <div
                             className="load-progress-fill"
                             style={{
-                                width: `${usagePercentage}%`
+                                width: `${Math.min(
+                                    liveLoad.usagePercentage,
+                                    100
+                                )}%`
+                                // `${usagePercentage}%`
                             }}
                         ></div>
 

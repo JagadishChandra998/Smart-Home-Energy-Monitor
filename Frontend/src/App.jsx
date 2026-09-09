@@ -8,6 +8,8 @@ import {
 import Login from "./components/Login.jsx";
 import Home from "./components/Home.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import Appliances from "./components/Appliances.jsx";
+
 
 function App() {
     return (
@@ -34,6 +36,11 @@ function App() {
                         element={
                             <Home />
                         }
+                    />
+
+                    <Route
+                        path="/appliances"
+                        element={<Appliances />}
                     />
 
                 </Route>
