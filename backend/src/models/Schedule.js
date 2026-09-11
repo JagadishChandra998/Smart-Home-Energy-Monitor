@@ -8,7 +8,7 @@ const ScheduleSchema = new mongoose.Schema(
             required: true
         },
 
-        appliancesId: {
+        applianceId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Appliance",
             required: true,

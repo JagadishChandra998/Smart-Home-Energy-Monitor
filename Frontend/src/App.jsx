@@ -9,6 +9,7 @@ import Login from "./components/Login.jsx";
 import Home from "./components/Home.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Appliances from "./components/Appliances.jsx";
+import Schedule from "./components/Schedule.jsx";
 
 
 function App() {
@@ -41,6 +42,10 @@ function App() {
                     <Route
                         path="/appliances"
                         element={<Appliances />}
+                    />
+                    <Route
+                        path="/schedule"
+                        element={<Schedule />}
                     />
 
                 </Route>

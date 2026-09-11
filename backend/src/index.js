@@ -5,6 +5,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import applianceRoutes from "./routes/applianceRoutes.js"
 import ScheduleRoutes from "./routes/scheduleRoutes.js";
+import { runScheduleEngine } from "./services/scheduleEngine.js";
 
 dotenv.config();
 
@@ -31,4 +32,10 @@ connectDB();
 
 app.listen (PORT, () =>{
     console.log (`server is running on port ${PORT}`);
-})
+});
+
+runScheduleEngine();
+
+setInterval(() =>{
+    runScheduleEngine();
+}, 10 * 1000);

@@ -4,9 +4,10 @@ import Appliance from "../models/Appliance.js";
 export const createSchedule = async (req, res) =>{
     try{
 
-        const {appliancesId, day, startTime, endTime}= req.body;
+        const {applianceId, day, startTime, endTime}= req.body;
+        console.log("SCHEDULE BODY:", req.body);
 
-        if(!appliancesId || !day || !startTime || !endTime){
+        if(!applianceId || !day || !startTime || !endTime){
             return res.status(400).json({
                 success:false,
                 message:"Appliance, day, start time and end time are required",
@@ -14,7 +15,7 @@ export const createSchedule = async (req, res) =>{
         }
 
         const appliance = await Appliance.findOne({
-            _id:appliancesId,
+            _id:applianceId,
             userId:req.user.id
         });
 
@@ -25,16 +26,16 @@ export const createSchedule = async (req, res) =>{
             });
         }
 
-        if(startTime >= endTime){
+        if(startTime === endTime){
             return res.status(404).json({
                 success:false,
-                message:"End time must be later than start time",
+                message:"Start time and end time cannot be the same",
             });
         }
 
         const schedule = await Schedule.create({
             userId:req.user.id,
-            appliancesId,
+            applianceId,
             day,
             startTime,
             endTime
@@ -65,7 +66,7 @@ export const getSchedules = async (req, res) =>{
             userId: req.user.id,
         })
         .populate(
-            "appliancesId",
+            "applianceId",
             "applianceName room powerRating priority status"
         )
         .sort({
@@ -93,7 +94,7 @@ export const getSchedules = async (req, res) =>{
 export const updateSchedule =async (req, res) =>{
     try{
 
-        const {appliancesId, day, startTime, endTime} = req.body;
+        const {applianceId, day, startTime, endTime} = req.body;
 
         const schedules = await Schedule.findOne({
             _id:req.params.id,
@@ -108,7 +109,7 @@ export const updateSchedule =async (req, res) =>{
         };
 
         const appliance = await Appliance.findOne({
-            _id:appliancesId,
+            _id:applianceId,
             userId:req.user.id,
         });
 
@@ -122,7 +123,7 @@ export const updateSchedule =async (req, res) =>{
         const newStartTime = startTime ?? schedules.startTime;
         const newEndTime =endTime ?? schedules.endTime;
 
-        if(newStartTime >= newEndTime){
+        if(newStartTime === newEndTime){
             return res.status(400).json({
                 success: false,
                 message: "End time must be later than start time"
@@ -157,7 +158,7 @@ export const deleteSchedule =async (req, res) =>{
     try{
 
         const schedule = await Schedule.findOneAndDelete({
-            _id: req.params,
+            _id: req.params.id,
             userId:req.user.id,
         });
 
@@ -200,7 +201,7 @@ export const toggleSchedule = async (req, res) =>{
             });
         };
 
-        schedule.enanled = !schedule.enanled;
+        schedule.enabled = !schedule.enabled;
 
         await schedule.save();
 

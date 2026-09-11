@@ -160,7 +160,7 @@ function Home() {
 
                     <button
                         onClick={() =>
-                            navigate("/timetable")
+                            navigate("/schedule")
                         }
                     >
                         Schedule
