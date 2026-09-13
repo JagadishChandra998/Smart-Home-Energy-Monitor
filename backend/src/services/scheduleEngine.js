@@ -39,7 +39,7 @@ export const runScheduleEngine = async (req, res) => {
         // const currentTime = now.toLocaleTimeString().slice(0, 5);
         const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
 
-        // console.log(`Schedule Engine: ${currentDay} ${currentTime}`);
+        console.log(`Schedule Engine: ${currentDay} ${currentTime}`);
 
         //get enable schedule for today
 
@@ -111,19 +111,19 @@ export const runScheduleEngine = async (req, res) => {
                 }
             };
 
-            // console.log(
-            //     "Current:",
-            //     currentDay,
-            //     currentTime,
-            //     "Start:",
-            //     schedule.startTime,
-            //     "End:",
-            //     schedule.endTime,
-            //     "Should Run:",
-            //     shouldRun,
-            //     "Applicance:",
-            //     appliance.applianceName
-            // );
+            console.log(
+                "Current:",
+                currentDay,
+                currentTime,
+                "Start:",
+                schedule.startTime,
+                "End:",
+                schedule.endTime,
+                "Should Run:",
+                shouldRun,
+                "Applicance:",
+                appliance.applianceName
+            );
 
             if (shouldRun) {
 

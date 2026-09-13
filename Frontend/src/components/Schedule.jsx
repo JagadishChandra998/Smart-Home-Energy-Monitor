@@ -12,7 +12,7 @@ function Schedule() {
 
     const [form, setForm] = useState({
         applianceId: "",
-        day: "",
+        days: [],
         startTime: "",
         endTime: ""
     });
@@ -93,6 +93,34 @@ function Schedule() {
 
     };
 
+    //handel check box
+    const handleDayChange = (day) => {
+        setForm((previous) => {
+            const alreadySelected = previous.days.includes(day);
+
+            return {
+                ...previous,
+                days: alreadySelected
+                    ? previous.days.filter((item) => item !== day)
+                    : [...previous.days, day]
+            };
+        });
+    };
+
+    const handleAllDays = (event) => {
+        if (event.target.checked) {
+            setForm((previous) => ({
+                ...previous,
+                days: [...days]
+            }));
+        } else {
+            setForm((previous) => ({
+                ...previous,
+                days: []
+            }));
+        }
+    };
+
     // CREATE SCHEDULE
 
     const handleSubmit = async (event) => {
@@ -103,12 +131,13 @@ function Schedule() {
 
         if (
             !form.applianceId ||
+            form.days.length === 0 ||
             !form.startTime ||
             !form.endTime
         ) {
 
             setError(
-                "Please fill all schedule fields."
+                "Please select an appliance, at least one day, start time and end time."
             );
 
             return;
@@ -118,7 +147,7 @@ function Schedule() {
         if (form.startTime === form.endTime) {
 
             setError(
-                "End time must be later than start time."
+                "Start time and end time cannot be the same."
             );
 
             return;
@@ -137,7 +166,7 @@ function Schedule() {
 
             setForm({
                 applianceId: "",
-                day: "Monday",
+                days: [],
                 startTime: "",
                 endTime: ""
             });
@@ -223,7 +252,17 @@ function Schedule() {
         })
     );
 
-    const today = new Date().toLocaleDateString("en",{weekday:"long"});
+    // const days = [
+    //     "Sunday",
+    //     "Monday",
+    //     "Tuesday",
+    //     "Wednesday",
+    //     "Thursday",
+    //     "Friday",
+    //     "Saturday"
+    // ];
+
+    const today = new Date().toLocaleDateString("en", { weekday: "long" });
 
     const getSchedulesForDay = (day) => {
         return schedules.filter((schedule) => schedule.day === day);
@@ -337,7 +376,7 @@ function Schedule() {
                     </div>
 
 
-                    <div className="form-group">
+                    {/* <div className="form-group">
 
                         <label>
                             Day
@@ -350,7 +389,6 @@ function Schedule() {
                         >
 
                             <option value="">
-                                {/* Select Day */}
                                 {today}
                             </option>
                             {
@@ -360,9 +398,43 @@ function Schedule() {
                                     </option>
                                 ))
                             }
-                           
-
                         </select>
+
+                    </div> */}
+
+                    <div className="form-group schedule-days-group">
+
+                        <label>Days</label>
+
+                        <label className="all-days-checkbox">
+                            <input
+                                type="checkbox"
+                                checked={form.days.length === days.length}
+                                onChange={handleAllDays}
+                            />
+
+                            <span>All Days</span>
+                        </label>
+
+                        <div className="days-checkboxes">
+
+                            {days.map((day) => (
+                                <label
+                                    key={day}
+                                    className="day-checkbox"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        value={day}
+                                        checked={form.days.includes(day)}
+                                        onChange={() => handleDayChange(day)}
+                                    />
+
+                                    <span>{day}</span>
+                                </label>
+                            ))}
+
+                        </div>
 
                     </div>
 
@@ -684,8 +756,8 @@ function Schedule() {
 
                                             <div
                                                 className={`timetable-event ${schedule.enabled
-                                                        ? ""
-                                                        : "event-disabled"
+                                                    ? ""
+                                                    : "event-disabled"
                                                     }`}
                                                 key={schedule._id}
                                             >
@@ -728,8 +800,8 @@ function Schedule() {
 
                                                 <span
                                                     className={`event-status ${schedule.enabled
-                                                            ? "event-enabled"
-                                                            : "event-disabled-status"
+                                                        ? "event-enabled"
+                                                        : "event-disabled-status"
                                                         }`}
                                                 >
                                                     {schedule.enabled

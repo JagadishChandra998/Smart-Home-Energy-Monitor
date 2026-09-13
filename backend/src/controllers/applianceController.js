@@ -224,43 +224,92 @@ export const toggleAppliance = async (req, res) => {
         //find lower priority running appliances
 
         const lowerPriorityAppliances =
-            runningAppliances.filter(
-                item => priorityValue[item.priority] < priorityValue[appliance.priority]
-            )
-                .sort((a, b) => priorityValue[a.priority] - priorityValue[b.priority]
+            runningAppliances.filter(item => {
+                return (
+                    priorityValue[item.priority] < priorityValue[appliance.priority]
                 );
+            });
+        console.log(
+            "Lower priority appliances",
+            lowerPriorityAppliances.map(item => ({
+                name: item.applianceName,
+                power: item.powerRating,
+                priority: item.priority
+            }))
+        );
+
+        // find the best combination based on priority
+
+        let bestCombination = null;
+
+        // Sort from lowest priority to highest priority
+        lowerPriorityAppliances.sort((a, b) => {
+            return priorityValue[a.priority] - priorityValue[b.priority];
+        });
 
         let freeLoad = 0;
         const appliancesToTurnOff = [];
 
         for (const item of lowerPriorityAppliances) {
+
             appliancesToTurnOff.push(item);
 
             freeLoad += item.powerRating;
+
+            console.log(
+                `Selected: ${item.applianceName} | ` +
+                `Priority: ${item.priority} | ` +
+                `Power: ${item.powerRating}W | ` +
+                `Freed Load: ${freeLoad}W`
+            );
 
             if (freeLoad >= reduceLoad) {
                 break;
             }
         }
 
+        if (freeLoad >= reduceLoad) {
+            bestCombination = appliancesToTurnOff;
+        }
+
+        //check result
+
+        if (!bestCombination) {
+            return res.status(400).json({
+                success: false,
+                message: "Power load limit exceeded and no sufficient lower-priority load can be removed",
+                currentLoad,
+                appliancesPower: appliance.powerRating,
+                requestedLoad: newLoad,
+                reduceLoad,
+                maximumLoad: MAX_LOAD
+
+            });
+        }
+
+        console.log("Required Load", reduceLoad);
+        console.log("Selected appliances:", bestCombination.map(item => item.applianceName));
+        console.log("Free Load", freeLoad);
+
+
         //Not enough load can free
 
         if (freeLoad < reduceLoad) {
             return res.status(400).json({
                 success: false,
-                message:"Power load limit exceeded and no sufficient lower-priority load can be removed",
+                message: "Power load limit exceeded and no sufficient lower-priority load can be removed",
 
                 currentLoad,
-                AppliancesPower:appliance.powerRating,
-                requestedLoad:newLoad,
+                AppliancesPower: appliance.powerRating,
+                requestedLoad: newLoad,
                 reduceLoad,
-                maximunLoad:MAX_LOAD,
+                maximunLoad: MAX_LOAD,
             });
         }
 
         //Turn OFF lower priority
 
-        for(const item of appliancesToTurnOff){
+        for (const item of bestCombination) {
             item.status = false;
 
             await item.save();
@@ -277,14 +326,14 @@ export const toggleAppliance = async (req, res) => {
         console.log(`priorityAppliancesON: ${appliance.applianceName}`);
 
         res.status(200).json({
-            success:true,
-            message:"Appliances turn ON using priority management",
+            success: true,
+            message: "Appliances turn ON using priority management",
             appliance,
-            turnOffAppliances:appliancesToTurnOff.map( item => ({
-                id:item.id,
-                applianceName:item.applianceName,
-                powerRating:item.powerRating,
-                priority:item.priority
+            turnOffAppliances: bestCombination.map(item => ({
+                id: item.id,
+                applianceName: item.applianceName,
+                powerRating: item.powerRating,
+                priority: item.priority
             }))
         });
 
