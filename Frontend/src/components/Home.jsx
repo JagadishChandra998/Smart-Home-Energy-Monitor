@@ -440,7 +440,7 @@ function Home() {
 
                         ) : (
 
-                            appliances.slice(0, 6).map(
+                            appliances.slice(0, 8).map(
                                 (appliance) => (
 
                                     <div

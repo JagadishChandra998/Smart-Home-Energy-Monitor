@@ -24,7 +24,7 @@ const applianceSchema = new mongoose.Schema(
         },
         priority:{
             type:String,
-            enum:["high","medium","low"],
+            enum:["highest","high","medium","low","lowest"],
             default:"medium"
         },
         status:{

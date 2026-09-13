@@ -38,4 +38,4 @@ runScheduleEngine();
 
 setInterval(() =>{
     runScheduleEngine();
-}, 10 * 1000);
+}, 30 * 1000);

@@ -411,13 +411,9 @@
 .appliance-power {
     display: flex;
     justify-content: space-between;
-
     align-items: center;
-
     margin: 20px 0;
-
     padding-top: 15px;
-
     border-top: 1px solid #edf0f3;
 }
 

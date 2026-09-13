@@ -138,8 +138,7 @@
     padding: 27px;
 
     box-shadow:
-        0 10px 30px
-        rgba(23, 32, 51, 0.05);
+        0 10px 30px rgba(23, 32, 51, 0.05);
 }
 
 .form-heading {
@@ -199,8 +198,7 @@
     border-color: #172033;
 
     box-shadow:
-        0 0 0 3px
-        rgba(23, 32, 51, 0.06);
+        0 0 0 3px rgba(23, 32, 51, 0.06);
 }
 
 .power-input {
@@ -304,12 +302,7 @@
     display: grid;
 
     grid-template-columns:
-        48px
-        1.5fr
-        120px
-        100px
-        110px
-        auto;
+        48px 1.5fr 120px 100px 110px auto;
 
     align-items: center;
 
@@ -322,8 +315,7 @@
     transform: translateY(-2px);
 
     box-shadow:
-        0 8px 22px
-        rgba(23, 32, 51, 0.06);
+        0 8px 22px rgba(23, 32, 51, 0.06);
 }
 
 .item-icon {
@@ -386,19 +378,31 @@
     text-transform: capitalize;
 }
 
+.priority.highest {
+    background: #fff0ed;
+    color: #f42505;
+}
+
 .priority.high {
     background: #fff0ed;
-    color: #c63d27;
+    color: #f55c04;
 }
 
 .priority.medium {
     background: #fff7df;
-    color: #a87900;
+    color: #e2ab20;
 }
 
 .priority.low {
     background: #eaf8f1;
-    color: #158653;
+    color: #02ca08;
+
+}
+
+.priority.lowest {
+    background: #eaf8f1;
+    color: #0ae318c3;
+
 }
 
 /* ================= STATUS ================= */
@@ -574,10 +578,7 @@
 
     .appliance-item {
         grid-template-columns:
-            48px
-            1fr
-            100px
-            90px;
+            48px 1fr 100px 90px;
 
         gap: 14px;
     }

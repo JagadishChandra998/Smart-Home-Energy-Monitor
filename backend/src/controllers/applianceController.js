@@ -143,6 +143,7 @@ export const deleteAppliance = async (req, res) => {
 
 export const toggleAppliance = async (req, res) => {
     try {
+
         const appliance = await Appliance.findOne({
             _id: req.params.id,
             userId: req.user.id
@@ -151,102 +152,194 @@ export const toggleAppliance = async (req, res) => {
         if (!appliance) {
             return res.status(404).json({
                 success: false,
-                message: "Appliances not found",
+                message: "Appliance not found"
             });
         }
 
-        if (!appliance.status) {
-            const runningAppliances = await Appliance.find({
-                userId: req.user.id,
-                status: true,
-            })
+        //TURN OFF
 
-
-            const currentLoad = runningAppliances.reduce(
-                (total, appliance) => total + appliance.powerRating, 0
-            );
-
-            const newLoad = currentLoad + appliance.powerRating;
-
-            const MAX_LOAD = 5000;
-
-            if (newLoad > MAX_LOAD) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Power load limit exceeded",
-                    currentLoad,
-                    appliancePower: appliance.powerRating,
-                    requestedLoad: newLoad,
-                    maximumLoad: MAX_LOAD,
-                });
-            }
-            appliance.status = true;
-        }
-        else{
+        if (appliance.status) {
             appliance.status = false;
+
+            await appliance.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Appliance turned OFF",
+                appliance
+            })
+        };
+
+        //turn ON
+
+        const runningAppliances = await Appliance.find({
+            userId: req.user.id,
+            status: true
+        });
+
+        const currentLoad = runningAppliances.reduce((total, appliance) => total + appliance.powerRating, 0);
+
+        const newLoad = currentLoad + appliance.powerRating;
+
+        const MAX_LOAD = 5000;
+
+        console.log("Priority Load Management");
+        console.log("Appliance:", appliance.applianceName);
+        console.log("Priority:", appliance.priority);
+        console.log("Current Load:", currentLoad);
+        console.log("Appliance Power:", appliance.powerRating);
+        console.log("New Load:", newLoad);
+        console.log("Maximum Load:", MAX_LOAD);
+        console.log("===============");
+
+        //Is Load Avalable
+
+        if (newLoad <= MAX_LOAD) {
+            appliance.status = true;
+
+            await appliance.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Appliance turned ON",
+                appliance
+            })
+        };
+
+        //Load Limit Exceeded
+
+        const reduceLoad = newLoad - MAX_LOAD;
+        console.log(`Need to free ${reduceLoad}`);
+
+        //Priority Order
+
+        const priorityValue = {
+            lowest: 1,
+            low: 2,
+            medium: 3,
+            high: 4,
+            highest: 5
+        };
+
+        //find lower priority running appliances
+
+        const lowerPriorityAppliances =
+            runningAppliances.filter(
+                item => priorityValue[item.priority] < priorityValue[appliance.priority]
+            )
+                .sort((a, b) => priorityValue[a.priority] - priorityValue[b.priority]
+                );
+
+        let freeLoad = 0;
+        const appliancesToTurnOff = [];
+
+        for (const item of lowerPriorityAppliances) {
+            appliancesToTurnOff.push(item);
+
+            freeLoad += item.powerRating;
+
+            if (freeLoad >= reduceLoad) {
+                break;
+            }
         }
+
+        //Not enough load can free
+
+        if (freeLoad < reduceLoad) {
+            return res.status(400).json({
+                success: false,
+                message:"Power load limit exceeded and no sufficient lower-priority load can be removed",
+
+                currentLoad,
+                AppliancesPower:appliance.powerRating,
+                requestedLoad:newLoad,
+                reduceLoad,
+                maximunLoad:MAX_LOAD,
+            });
+        }
+
+        //Turn OFF lower priority
+
+        for(const item of appliancesToTurnOff){
+            item.status = false;
+
+            await item.save();
+
+            console.log(`lowPriorityAppliances OFF: ${item.applianceName}`);
+        }
+
+        // Turn on request appliances
+
+        appliance.status = true;
 
         await appliance.save();
 
+        console.log(`priorityAppliancesON: ${appliance.applianceName}`);
+
         res.status(200).json({
             success:true,
-            message:appliance.status ? "Appliance turned ON" : "Appliance turned OFF",
-            appliance
+            message:"Appliances turn ON using priority management",
+            appliance,
+            turnOffAppliances:appliancesToTurnOff.map( item => ({
+                id:item.id,
+                applianceName:item.applianceName,
+                powerRating:item.powerRating,
+                priority:item.priority
+            }))
         });
 
     }
-
     catch (error) {
-        console.log("toggle Appliances error:", error);
+        console.log("toggle Error", error);
         res.status(500).json({
             success: false,
-            message: "Server Error",
+            message: "Server Error"
         });
     }
 };
 
 //Live Load
 
-export const getLiveLoad = async (req, res) =>{
-    try{
+export const getLiveLoad = async (req, res) => {
+    try {
 
         const MAX_LOAD = 5000;
 
         const runningAppliances = await Appliance.find({
-            userId:req.user.id,
-            status:true,
+            userId: req.user.id,
+            status: true,
         });
 
         const currentLoad = runningAppliances.reduce(
-            (total, appliance) => total + appliance.powerRating, 0 
+            (total, appliance) => total + appliance.powerRating, 0
         );
 
-        const  currentLoadPerKW = currentLoad / 1000;
+        const currentLoadPerKW = currentLoad / 1000;
 
         const remainingLoad = Math.max(MAX_LOAD - currentLoad, 0);
 
         const usagePercentage = (currentLoad / MAX_LOAD) * 100;
 
         res.status(200).json({
-            success:true,
+            success: true,
             currentLoad,
             currentLoadPerKW,
 
-            maximumLoad:MAX_LOAD,
+            maximumLoad: MAX_LOAD,
             remainingLoad: remainingLoad / 1000,
 
-            usagePercentage:Number(usagePercentage.toFixed(2)),
+            usagePercentage: Number(usagePercentage.toFixed(2)),
 
             runningAppliances
 
         });
     }
-    catch(error){
-        console.log ("LiveLoad Error:",error);
+    catch (error) {
+        console.log("LiveLoad Error:", error);
         res.status(500).json(
             {
-                success:false,
-                message:"Server Error",
+                success: false,
+                message: "Server Error",
             }
         );
     }

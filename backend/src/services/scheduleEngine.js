@@ -111,19 +111,19 @@ export const runScheduleEngine = async (req, res) => {
                 }
             };
 
-            console.log(
-                "Current:",
-                currentDay,
-                currentTime,
-                "Start:",
-                schedule.startTime,
-                "End:",
-                schedule.endTime,
-                "Should Run:",
-                shouldRun,
-                "Applicance:",
-                appliance.applianceName
-            );
+            // console.log(
+            //     "Current:",
+            //     currentDay,
+            //     currentTime,
+            //     "Start:",
+            //     schedule.startTime,
+            //     "End:",
+            //     schedule.endTime,
+            //     "Should Run:",
+            //     shouldRun,
+            //     "Applicance:",
+            //     appliance.applianceName
+            // );
 
             if (shouldRun) {
 
@@ -166,21 +166,21 @@ export const runScheduleEngine = async (req, res) => {
 
         //turn offappliances
 
-        const runningAppliances = await Appliance.find({
-            status: true
-        });
+        // const runningAppliances = await Appliance.find({
+        //     status: true
+        // });
 
-        for (const appliance of runningAppliances) {
-            const applianceId = appliance._id.toString();
+        // for (const appliance of runningAppliances) {
+        //     const applianceId = appliance._id.toString();
 
-            if (!activeApplianceIds.has(applianceId)) {
-                appliance.status = false;
+        //     if (!activeApplianceIds.has(applianceId)) {
+        //         appliance.status = false;
 
-                await appliance.save();
-                console.log(`Auto OFF: ${appliance.applianceName}`);
+        //         await appliance.save();
+        //         console.log(`Auto OFF: ${appliance.applianceName}`);
 
-            }
-        }
+        //     }
+        // }
     }
 
     catch (error) {
