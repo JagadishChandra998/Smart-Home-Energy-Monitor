@@ -111,19 +111,19 @@ export const runScheduleEngine = async (req, res) => {
                 }
             };
 
-            console.log(
-                "Current:",
-                currentDay,
-                currentTime,
-                "Start:",
-                schedule.startTime,
-                "End:",
-                schedule.endTime,
-                "Should Run:",
-                shouldRun,
-                "Applicance:",
-                appliance.applianceName
-            );
+            // console.log(
+            //     "Current:",
+            //     currentDay,
+            //     currentTime,
+            //     "Start:",
+            //     schedule.startTime,
+            //     "End:",
+            //     schedule.endTime,
+            //     "Should Run:",
+            //     shouldRun,
+            //     "Applicance:",
+            //     appliance.applianceName
+            // );
 
             if (shouldRun) {
 

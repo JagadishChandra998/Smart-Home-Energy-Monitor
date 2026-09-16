@@ -385,13 +385,17 @@
 }
 
 .status.on {
-    background: #e4f8ee;
-    color: #15945c;
+    /* background: #e4f8ee; */
+    background:green ;
+    /* color: #15945c; */
+    color: #ffffff;
 }
 
 .status.off {
     background: #f0f1f3;
+    /* background: red; */
     color: #7d8490;
+    /* color: #ffffff; */
 }
 
 .appliance-card h3 {
@@ -443,21 +447,27 @@
 }
 
 .turn-on {
-    background: #172033;
-    color: white;
+    /* background: #172033; */
+    background: rgb(13, 182, 13);
+    /* color: white; */
+    color:white;
 }
 
 .turn-on:hover {
-    background: #28354c;
+    /* background: #28354c; */
+    background: #189639;
 }
 
 .turn-off {
-    background: #f0f1f3;
-    color: #4f5765;
+    /* background: #f0f1f3; */
+    background: rgb(230, 6, 6);
+    /* color: #4f5765; */
+    color: #ffffff;
 }
 
 .turn-off:hover {
-    background: #e4e6e9;
+    /* background: #e4e6e9; */
+    background: rgb(200, 19, 19);
 }
 
 /* ================= EMPTY ================= */

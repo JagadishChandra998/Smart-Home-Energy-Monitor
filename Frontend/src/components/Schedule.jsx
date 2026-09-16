@@ -262,7 +262,7 @@ function Schedule() {
     //     "Saturday"
     // ];
 
-    const today = new Date().toLocaleDateString("en", { weekday: "long" });
+    // const today = new Date().toLocaleDateString("en", { weekday: "long" });
 
     const getSchedulesForDay = (day) => {
         return schedules.filter((schedule) => schedule.day === day);
