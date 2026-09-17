@@ -5,6 +5,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import applianceRoutes from "./routes/applianceRoutes.js"
 import ScheduleRoutes from "./routes/scheduleRoutes.js";
+import energyHistoryRoutes from "./routes/energyHistoryRoutes.js";
 import { runScheduleEngine } from "./services/scheduleEngine.js";
 
 dotenv.config();
@@ -17,6 +18,7 @@ app.use (express.json());
 app.use("/api/auth",authRoutes);
 app.use("/api/appliances",applianceRoutes);
 app.use("/api/schedules",ScheduleRoutes);
+app.use("/api/energy-history",energyHistoryRoutes);
 
 
 app.get ("/", (req, res) =>{

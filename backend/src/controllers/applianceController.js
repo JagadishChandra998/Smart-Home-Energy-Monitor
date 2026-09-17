@@ -158,17 +158,64 @@ export const toggleAppliance = async (req, res) => {
 
         //TURN OFF
 
-        if (appliance.status) {
+        // if (appliance.status) {
+        //     appliance.status = false;
+
+        //     await appliance.save();
+
+        //     return res.status(200).json({
+        //         success: true,
+        //         message: "Appliance turned OFF",
+        //         appliance
+        //     })
+        // };
+
+                if (appliance.status) {
+
+            // Create Energy History before turning OFF
+            if (appliance.runStartedAt) {
+
+                const startTime = appliance.runStartedAt;
+                const endTime = new Date();
+
+                const duration =
+                    (endTime.getTime() - startTime.getTime()) /
+                    (1000 * 60 * 60);
+
+                const powerInKw =
+                    appliance.powerRating / 1000;
+
+                const energyConsumed =
+                    powerInKw * duration;
+
+                await EnergyHistory.create({
+                    userId: req.user.id,
+                    applianceId: appliance._id,
+                    applianceName: appliance.applianceName,
+                    powerRating: appliance.powerRating,
+                    startTime,
+                    endTime,
+                    duration: Number(duration.toFixed(2)),
+                    energyConsumed: Number(
+                        energyConsumed.toFixed(3)
+                    ),
+                    source: appliance.runSource || "manual"
+                });
+            }
+
+            // Turn appliance OFF
             appliance.status = false;
+            appliance.runStartedAt = null;
+            appliance.runSource = null;
 
             await appliance.save();
 
             return res.status(200).json({
                 success: true,
-                message: "Appliance turned OFF",
-                appliance
-            })
-        };
+                message: "Appliance turned OFF"
+            });
+        }
+
 
         //turn ON
 
